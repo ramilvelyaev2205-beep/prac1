@@ -32,8 +32,6 @@ def _replace(record, **changes):
     })
 
 
-# ----------------------------- Agent -------------------------------------
-
 def create_agent(storage: Storage, ip: str, platform: str,
                  user_agent: str) -> Agent:
     agent = Agent(
@@ -68,8 +66,6 @@ def update_agent(storage: Storage, key: int, *, ip=None, platform=None,
 def delete_agent(storage: Storage, key: int) -> None:
     storage.agents.remove(get_agent(storage, key))
 
-
-# ---------------------------- Message ------------------------------------
 
 def create_message(storage: Storage, arg: str, agent: int, description: str,
                    tags: str, stage: str) -> Message:
@@ -109,8 +105,6 @@ def delete_message(storage: Storage, key: int) -> None:
     storage.messages.remove(get_message(storage, key))
 
 
-# ----------------------------- Reply -------------------------------------
-
 def create_reply(storage: Storage, output: str, stage: str, exception: str,
                  message: int) -> Reply:
     get_message(storage, message)
@@ -147,8 +141,6 @@ def update_reply(storage: Storage, key: int, *, output=None, stage=None,
 def delete_reply(storage: Storage, key: int) -> None:
     storage.replies.remove(get_reply(storage, key))
 
-
-# ----------------------------- Join --------------------------------------
 
 def join_agents_messages(storage: Storage,
                          window_minutes: int = WINDOW_MINUTES) -> list:

@@ -32,7 +32,8 @@ class RpcClient:
     def create_agent(self, ip, platform, user_agent):
         body = (f"<request><ip>{escape(str(ip))}</ip>"
                 f"<platform>{escape(str(platform))}</platform>"
-                f"<user_agent>{escape(str(user_agent))}</user_agent></request>")
+                f"<user_agent>{escape(str(user_agent))}"
+                f"</user_agent></request>")
         return self._call("create_agent", body)
 
     def get_agents(self):
