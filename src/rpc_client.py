@@ -1,8 +1,9 @@
-﻿"""Клиент RPC (вариант 7)."""
+"""Клиент RPC (вариант 7)."""
 
 from __future__ import annotations
 
 import socket
+from xml.sax.saxutils import escape
 
 from src.protocol import pack_request, read_response
 
@@ -29,66 +30,73 @@ class RpcClient:
         return response
 
     def create_agent(self, ip, platform, user_agent):
-        body = (f"<request><ip>{ip}</ip><platform>{platform}</platform>"
-                f"<user_agent>{user_agent}</user_agent></request>")
+        body = (f"<request><ip>{escape(str(ip))}</ip>"
+                f"<platform>{escape(str(platform))}</platform>"
+                f"<user_agent>{escape(str(user_agent))}</user_agent></request>")
         return self._call("create_agent", body)
 
     def get_agents(self):
         return self._call("get_agents", "<request/>")
 
     def get_agent(self, key):
-        return self._call("get_agent", f"<request><key>{key}</key></request>")
+        return self._call("get_agent",
+                          f"<request><key>{int(key)}</key></request>")
 
     def update_agent(self, key, ip=None):
-        tag = f"<ip>{ip}</ip>" if ip else ""
-        body = f"<request><key>{key}</key>{tag}</request>"
-        return self._call("update_agent", body)
+        tag = f"<ip>{escape(str(ip))}</ip>" if ip else ""
+        return self._call("update_agent",
+                          f"<request><key>{int(key)}</key>{tag}</request>")
 
     def delete_agent(self, key):
-        body = f"<request><key>{key}</key></request>"
-        return self._call("delete_agent", body)
+        return self._call("delete_agent",
+                          f"<request><key>{int(key)}</key></request>")
 
     def create_message(self, arg, agent, description, tags, stage):
-        body = (f"<request><arg>{arg}</arg><agent>{agent}</agent>"
-                f"<description>{description}</description><tags>{tags}</tags>"
-                f"<stage>{stage}</stage></request>")
+        body = (f"<request><arg>{escape(str(arg))}</arg>"
+                f"<agent>{int(agent)}</agent>"
+                f"<description>{escape(str(description))}</description>"
+                f"<tags>{escape(str(tags))}</tags>"
+                f"<stage>{escape(str(stage))}</stage></request>")
         return self._call("create_message", body)
 
     def get_messages(self):
         return self._call("get_messages", "<request/>")
 
     def get_message(self, key):
-        return self._call("get_message", f"<request><key>{key}</key></request>")
+        return self._call("get_message",
+                          f"<request><key>{int(key)}</key></request>")
 
     def update_message(self, key, arg=None):
-        tag = f"<arg>{arg}</arg>" if arg else ""
-        body = f"<request><key>{key}</key>{tag}</request>"
-        return self._call("update_message", body)
+        tag = f"<arg>{escape(str(arg))}</arg>" if arg else ""
+        return self._call("update_message",
+                          f"<request><key>{int(key)}</key>{tag}</request>")
 
     def delete_message(self, key):
-        body = f"<request><key>{key}</key></request>"
-        return self._call("delete_message", body)
+        return self._call("delete_message",
+                          f"<request><key>{int(key)}</key></request>")
 
     def create_reply(self, output, stage, exception, message):
-        body = (f"<request><output>{output}</output><stage>{stage}</stage>"
-                f"<exception>{exception}</exception>"
-                f"<message>{message}</message></request>")
+        body = (f"<request><output>{escape(str(output))}</output>"
+                f"<stage>{escape(str(stage))}</stage>"
+                f"<exception>{escape(str(exception))}</exception>"
+                f"<message>{int(message)}</message></request>")
         return self._call("create_reply", body)
 
     def get_replies(self):
         return self._call("get_replies", "<request/>")
 
     def get_reply(self, key):
-        return self._call("get_reply", f"<request><key>{key}</key></request>")
+        return self._call("get_reply",
+                          f"<request><key>{int(key)}</key></request>")
 
     def update_reply(self, key, output=None):
-        tag = f"<output>{output}</output>" if output else ""
-        body = f"<request><key>{key}</key>{tag}</request>"
-        return self._call("update_reply", body)
+        tag = f"<output>{escape(str(output))}</output>" if output else ""
+        return self._call("update_reply",
+                          f"<request><key>{int(key)}</key>{tag}</request>")
 
     def delete_reply(self, key):
-        body = f"<request><key>{key}</key></request>"
-        return self._call("delete_reply", body)
+        return self._call("delete_reply",
+                          f"<request><key>{int(key)}</key></request>")
 
     def join_agents_messages(self):
         return self._call("join_agents_messages", "<request/>")

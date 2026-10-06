@@ -1,4 +1,4 @@
-﻿"""Модели данных (вариант №7)."""
+"""Модели данных (вариант №7)."""
 
 from __future__ import annotations
 
@@ -49,7 +49,7 @@ class Storage:
     autoincrement: dict
 
     @classmethod
-    def empty(cls) -> "Storage":
+    def empty(cls) -> Storage:
         return cls([], [], [], {"agents": 1, "messages": 1, "replies": 1})
 
     def next_id(self, table: str) -> int:

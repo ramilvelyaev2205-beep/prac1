@@ -1,4 +1,4 @@
-﻿"""MBT: сравнение модели и RPC-сервера через hypothesis."""
+"""MBT: сравнение модели и RPC-сервера через hypothesis."""
 
 from __future__ import annotations
 
@@ -113,8 +113,8 @@ class ModelVsRpc(RuleBasedStateMachine):
     def _safe(func, *args):
         try:
             func(*args)
-        except Exception:
-            pass
+        except (ConnectionError, OSError, ValueError, LookupError) as exc:
+            print(f"[MBT] skip: {exc}")
 
 
 TestModelVsRpc = ModelVsRpc.TestCase

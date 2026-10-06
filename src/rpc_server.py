@@ -1,4 +1,4 @@
-﻿"""TCP RPC-сервер (вариант 7).
+"""TCP RPC-сервер (вариант 7).
 
 Журналирование: каждый ответ пишется в stdout.
 """
@@ -34,7 +34,10 @@ class RpcHandler(socketserver.BaseRequestHandler):
                 return
             if opcode == 0:
                 return
-            result = self._dispatch(opcode, body)
+            try:
+                result = self._dispatch(opcode, body)
+            except Exception as exc:  # noqa: BLE001
+                result = f"<error>{type(exc).__name__}: {exc}</error>"
             print(f"[RPC] opcode={opcode} -> {result[:60]}...")
             self.request.sendall(pack_response(opcode, result))
 
