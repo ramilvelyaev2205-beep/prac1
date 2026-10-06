@@ -44,7 +44,7 @@ class RpcHandler(socketserver.BaseRequestHandler):
                 return
             try:
                 result = self._dispatch(opcode, body)
-            except Exception as exc:  # noqa: BLE001
+            except (LookupError, ValueError, TypeError, KeyError) as exc:
                 result = f"<error>{type(exc).__name__}: {exc}</error>"
             print(f"[RPC] opcode={opcode} -> {result[:60]}...")
             self.request.sendall(pack_response(opcode, result))
