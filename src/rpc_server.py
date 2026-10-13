@@ -1,8 +1,3 @@
-"""TCP RPC-СЃРµСЂРІРµСЂ (РІР°СЂРёР°РЅС‚ 7).
-
-Р–СѓСЂРЅР°Р»РёСЂРѕРІР°РЅРёРµ: РєР°Р¶РґС‹Р№ РѕС‚РІРµС‚ РїРёС€РµС‚СЃСЏ РІ stdout.
-"""
-
 from __future__ import annotations
 
 import socketserver
@@ -164,7 +159,7 @@ class RpcHandler(socketserver.BaseRequestHandler):
         return f"<rows>{items}</rows>"
 
 
-class _ReusableTCPServer(socketserver.ThreadingTCPServer):
+class ReusableTcpServer(socketserver.ThreadingTCPServer):
     """TCP-сервер с SO_REUSEADDR — не падает при TimeWait."""
 
     allow_reuse_address = True
@@ -172,11 +167,10 @@ class _ReusableTCPServer(socketserver.ThreadingTCPServer):
 
 def serve(host: str = "127.0.0.1", port: int = 9090) -> None:
     RpcHandler.storage = Storage.empty()
-    with _ReusableTCPServer((host, port), RpcHandler) as server:
+    with ReusableTcpServer((host, port), RpcHandler) as server:
         print(f"RPC-сервер запущен на {host}:{port}")
         server.serve_forever()
 
 
 if __name__ == "__main__":
     serve()
-

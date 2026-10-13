@@ -131,5 +131,3 @@ TestModelVsRpc.settings = settings(
     ],
     deadline=None,
 )
-
-
