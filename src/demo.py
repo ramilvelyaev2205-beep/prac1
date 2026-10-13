@@ -10,8 +10,7 @@ def _section(title: str) -> None:
     print(f"\n=== {title} ===")
 
 
-def main() -> None:
-    def _demo_create(storage) -> None:
+def _demo_create(storage) -> None:
     _section("Создание записей")
     agent = repo.create_agent(storage, "127.0.0.1", "linux", "curl/8.0")
     print("Agent:", agent)
@@ -72,15 +71,6 @@ def main() -> None:
     _demo_join(storage)
     _demo_delete(storage)
     _demo_errors(storage)
-    _section("Обработка ошибок")
-    try:
-        repo.get_agent(storage, 999)
-    except repo.NotFoundError as exc:
-        print("NotFoundError:", exc)
-    try:
-        repo.create_message(storage, "a", 999, "d", "t", "s")
-    except repo.NotFoundError as exc:
-        print("NotFoundError (FK):", exc)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,3 @@
-"""Клиент RPC (вариант 7)."""
-
 from __future__ import annotations
 
 import socket
@@ -18,6 +16,12 @@ OPCODES = {
 }
 
 
+def _clean(text) -> str:
+    """Удалить control-символы, недопустимые в XML."""
+    s = str(text)
+    return "".join(c for c in s if c in "\t\n\r" or c.isprintable())
+
+
 class RpcClient:
     def __init__(self, host: str = "127.0.0.1", port: int = 9090) -> None:
         self.host = host
@@ -30,10 +34,10 @@ class RpcClient:
         return response
 
     def create_agent(self, ip, platform, user_agent):
-        body = (f"<request><ip>{escape(str(ip))}</ip>"
-                f"<platform>{escape(str(platform))}</platform>"
-                f"<user_agent>{escape(str(user_agent))}"
-                f"</user_agent></request>")
+        body = (f"<request><ip>{escape(_clean(ip))}</ip>"
+                f"<platform>{escape(_clean(platform))}</platform>"
+                f"<user_agent>{escape(_clean(user_agent))}</user_agent>"
+                f"</request>")
         return self._call("create_agent", body)
 
     def get_agents(self):
@@ -44,7 +48,7 @@ class RpcClient:
                           f"<request><key>{int(key)}</key></request>")
 
     def update_agent(self, key, ip=None):
-        tag = f"<ip>{escape(str(ip))}</ip>" if ip else ""
+        tag = f"<ip>{escape(_clean(ip))}</ip>" if ip else ""
         return self._call("update_agent",
                           f"<request><key>{int(key)}</key>{tag}</request>")
 
@@ -53,11 +57,11 @@ class RpcClient:
                           f"<request><key>{int(key)}</key></request>")
 
     def create_message(self, arg, agent, description, tags, stage):
-        body = (f"<request><arg>{escape(str(arg))}</arg>"
+        body = (f"<request><arg>{escape(_clean(arg))}</arg>"
                 f"<agent>{int(agent)}</agent>"
-                f"<description>{escape(str(description))}</description>"
-                f"<tags>{escape(str(tags))}</tags>"
-                f"<stage>{escape(str(stage))}</stage></request>")
+                f"<description>{escape(_clean(description))}</description>"
+                f"<tags>{escape(_clean(tags))}</tags>"
+                f"<stage>{escape(_clean(stage))}</stage></request>")
         return self._call("create_message", body)
 
     def get_messages(self):
@@ -68,7 +72,7 @@ class RpcClient:
                           f"<request><key>{int(key)}</key></request>")
 
     def update_message(self, key, arg=None):
-        tag = f"<arg>{escape(str(arg))}</arg>" if arg else ""
+        tag = f"<arg>{escape(_clean(arg))}</arg>" if arg else ""
         return self._call("update_message",
                           f"<request><key>{int(key)}</key>{tag}</request>")
 
@@ -77,9 +81,9 @@ class RpcClient:
                           f"<request><key>{int(key)}</key></request>")
 
     def create_reply(self, output, stage, exception, message):
-        body = (f"<request><output>{escape(str(output))}</output>"
-                f"<stage>{escape(str(stage))}</stage>"
-                f"<exception>{escape(str(exception))}</exception>"
+        body = (f"<request><output>{escape(_clean(output))}</output>"
+                f"<stage>{escape(_clean(stage))}</stage>"
+                f"<exception>{escape(_clean(exception))}</exception>"
                 f"<message>{int(message)}</message></request>")
         return self._call("create_reply", body)
 
@@ -91,7 +95,7 @@ class RpcClient:
                           f"<request><key>{int(key)}</key></request>")
 
     def update_reply(self, key, output=None):
-        tag = f"<output>{escape(str(output))}</output>" if output else ""
+        tag = f"<output>{escape(_clean(output))}</output>" if output else ""
         return self._call("update_reply",
                           f"<request><key>{int(key)}</key>{tag}</request>")
 

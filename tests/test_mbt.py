@@ -1,4 +1,4 @@
-"""MBT: сравнение модели и RPC-сервера через hypothesis."""
+"""MBT: СЃСЂР°РІРЅРµРЅРёРµ РјРѕРґРµР»Рё Рё RPC-СЃРµСЂРІРµСЂР° С‡РµСЂРµР· hypothesis."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from hypothesis.stateful import RuleBasedStateMachine, initialize, rule
 from src.rpc_client import RpcClient
 from src.rpc_server import serve as serve_rpc
 
-PORT = 19091
+PORT = 19093
 
 
 def _start_server() -> None:
@@ -24,7 +24,7 @@ def _start_server() -> None:
 
 
 class ModelVsRpc(RuleBasedStateMachine):
-    """Сравнение модели и RPC-сервера."""
+    """РЎСЂР°РІРЅРµРЅРёРµ РјРѕРґРµР»Рё Рё RPC-СЃРµСЂРІРµСЂР°."""
 
     @initialize()
     def setup(self) -> None:
@@ -128,3 +128,5 @@ TestModelVsRpc.settings = settings(
     ],
     deadline=None,
 )
+
+

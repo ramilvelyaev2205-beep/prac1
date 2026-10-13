@@ -1,4 +1,4 @@
-﻿"""TCP RPC-СЃРµСЂРІРµСЂ (РІР°СЂРёР°РЅС‚ 7).
+"""TCP RPC-СЃРµСЂРІРµСЂ (РІР°СЂРёР°РЅС‚ 7).
 
 Р–СѓСЂРЅР°Р»РёСЂРѕРІР°РЅРёРµ: РєР°Р¶РґС‹Р№ РѕС‚РІРµС‚ РїРёС€РµС‚СЃСЏ РІ stdout.
 """
@@ -30,6 +30,7 @@ OPCODES = {
     15: "delete_reply",
     16: "join_agents_messages",
 }
+
 
 class RpcHandler(socketserver.BaseRequestHandler):
     storage: Storage
@@ -163,10 +164,16 @@ class RpcHandler(socketserver.BaseRequestHandler):
         return f"<rows>{items}</rows>"
 
 
+class _ReusableTCPServer(socketserver.ThreadingTCPServer):
+    """TCP-сервер с SO_REUSEADDR — не падает при TimeWait."""
+
+    allow_reuse_address = True
+
+
 def serve(host: str = "127.0.0.1", port: int = 9090) -> None:
     RpcHandler.storage = Storage.empty()
-    with socketserver.ThreadingTCPServer((host, port), RpcHandler) as server:
-        print(f"RPC-СЃРµСЂРІРµСЂ Р·Р°РїСѓС‰РµРЅ РЅР° {host}:{port}")
+    with _ReusableTCPServer((host, port), RpcHandler) as server:
+        print(f"RPC-сервер запущен на {host}:{port}")
         server.serve_forever()
 
 
