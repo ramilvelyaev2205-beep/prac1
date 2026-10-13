@@ -1,4 +1,7 @@
-"""MBT: СЃСЂР°РІРЅРµРЅРёРµ РјРѕРґРµР»Рё Рё RPC-СЃРµСЂРІРµСЂР° С‡РµСЂРµР· hypothesis."""
+"""MBT: сравнение модели и RPC-сервера.
+
+Использует hypothesis.RuleBasedStateMachine.
+"""
 
 from __future__ import annotations
 

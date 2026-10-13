@@ -31,7 +31,10 @@ def _demo_read(storage) -> None:
 def _demo_update(storage) -> None:
     _section("Редактирование")
     print("update_agent:", repo.update_agent(storage, 1, platform="windows"))
-    print("update_message:", repo.update_message(storage, 1, stage="processed"))
+    print(
+        "update_message:",
+        repo.update_message(storage, 1, stage="processed"),
+    )
     print("update_reply:", repo.update_reply(storage, 1, output="output2"))
 
 
