@@ -142,13 +142,14 @@ def delete_reply(storage: Storage, key: int) -> None:
     storage.replies.remove(get_reply(storage, key))
 
 
-def join_agents_messages(storage: Storage,
-                         window_minutes: int = WINDOW_MINUTES) -> list:
+def join_agents_messages(
+    storage: Storage,
+    window_minutes: int = WINDOW_MINUTES,
+) -> list[tuple[str, str, str]]:
     threshold = _now() - window_minutes * MINUTE
-    result = []
-    for message in storage.messages:
-        if message.time < threshold:
-            continue
+    recent = [m for m in storage.messages if m.time >= threshold]
+    result: list[tuple[str, str, str]] = []
+    for message in recent:
         agent = _find(storage.agents, message.agent)
-        result.append((agent.ip, agent.platform))
+        result.append((agent.ip, agent.platform, message.tags))
     return result
