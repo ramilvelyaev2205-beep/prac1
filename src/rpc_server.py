@@ -168,7 +168,8 @@ class ReusableTcpServer(socketserver.ThreadingTCPServer):
 def serve(host: str = "127.0.0.1", port: int = 9090) -> None:
     RpcHandler.storage = Storage.empty()
     with ReusableTcpServer((host, port), RpcHandler) as server:
-        print(f"RPC-сервер запущен на {host}:{port}")
+        endpoint = f"{host}:{port}"
+        print(f"RPC-сервер запущен на {endpoint}")
         server.serve_forever()
 
 
